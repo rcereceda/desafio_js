@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Desafío JS</title>
+	<script>
+
+		function Persona(nombre, edad) { 	
+			this.nombre = nombre;
+			this.edad = edad;
+			this.ebriedad = 0;
+			this.total_sorbos = 0;
+
+			this.beber = function(bebida) {
+				if (bebida.getSorbos() > 0) {
+					if (this.total_sorbos < 30) {
+
+						if (bebida.alcoholica) {
+							if (this.edad >= 18) {
+								if (this.ebriedad < 25) {
+									bebida.setSorbos();
+									console.log(this.nombre + " ha dado un sorbo a su bebida alcohólica, le quedan " + bebida.getSorbos());
+									bebida.setLlena();
+									this.ebriedad++;
+									this.total_sorbos++;
+									if (this.ebriedad > 15) {
+										console.log(this.nombre + " está ebrio");
+									}
+								} else {
+									console.log(this.nombre + " no puede beber más bebidas alcohólicas");
+								}
+
+							} else {
+								console.log(this.nombre + " es menor de edad, no puede consumir bebidas alcohólicas");
+							}
+						} else {
+							bebida.setSorbos();
+							console.log(this.nombre + " ha dado un sorbo a su bebida NO alcohólica, le quedan " + bebida.getSorbos());
+							bebida.setLlena();
+							this.total_sorbos++;
+						}
+
+					} else {
+						console.log(this.nombre + " no puede beber más bebidas");
+					}
+					
+				} else {
+					console.log("La bebida está vacía");
+				}
+
+				return this;
+			}
+		}
+
+		function Bebida(alcoholica, sorbos) {
+			this.alcoholica = alcoholica;
+			this.sorbos = sorbos;
+			this.llena = true;
+
+			this.setSorbos = function() {
+				this.sorbos--;
+			}
+			this.getSorbos = function() {
+				return this.sorbos;
+			}
+
+			this.setLlena = function() {
+				this.llena = false;
+			}
+		}
+
+		var pedro = new Persona("Pedro", 21);
+		var juan = new Persona("Juan", 17);
+
+		var piscola = new Bebida(true, 5);
+		var cerveza = new Bebida(true, 5);
+		var jugo = new Bebida(false, 5);
+	
+	</script>
+	
+</head>
+<body>
+	
+</body>
+</html>
