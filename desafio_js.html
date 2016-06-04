@@ -12,40 +12,40 @@
 			this.total_sorbos = 0;
 
 			this.beber = function(bebida) {
-				if (bebida.getSorbos() > 0) {
-					if (this.total_sorbos < 30) {
-
-						if (bebida.alcoholica) {
-							if (this.edad >= 18) {
-								if (this.ebriedad < 25) {
-									bebida.setSorbos();
-									console.log(this.nombre + " ha dado un sorbo a su bebida alcohólica, le quedan " + bebida.getSorbos());
-									bebida.setLlena();
-									this.ebriedad++;
-									this.total_sorbos++;
-									if (this.ebriedad > 15) {
-										console.log(this.nombre + " está ebrio");
-									}
-								} else {
-									console.log(this.nombre + " no puede beber más bebidas alcohólicas");
-								}
-
-							} else {
-								console.log(this.nombre + " es menor de edad, no puede consumir bebidas alcohólicas");
-							}
-						} else {
-							bebida.setSorbos();
-							console.log(this.nombre + " ha dado un sorbo a su bebida NO alcohólica, le quedan " + bebida.getSorbos());
-							bebida.setLlena();
-							this.total_sorbos++;
-						}
-
-					} else {
-						console.log(this.nombre + " no puede beber más bebidas");
-					}
-					
-				} else {
+				
+				if (bebida.getSorbos() <= 0) {
 					console.log("La bebida está vacía");
+					return this;
+				}
+
+				if (this.total_sorbos >= 30) {
+					console.log(this.nombre + " no puede beber más bebidas");
+					return this;
+				}
+
+				if (bebida.getAlcoholica() && this.edad < 18) {
+					console.log(this.nombre + " es menor de edad, no puede consumir bebidas alcohólicas");
+					return this;
+				}
+
+				if (bebida.getAlcoholica() && this.ebriedad >= 25) {
+					console.log(this.nombre + " no puede beber más bebidas alcohólicas");
+					return this;
+				}
+
+				// Si no se cumplen las condiciones anteriores la persona puede beber
+				bebida.setSorbos();
+				bebida.setLlena();
+				this.total_sorbos++;
+
+				if (bebida.getAlcoholica()) {
+					console.log(this.nombre + " ha dado un sorbo a su bebida alcohólica, le quedan " + bebida.getSorbos());
+					this.ebriedad++;
+					if (this.ebriedad > 15) {
+						console.log(this.nombre + " está ebrio");
+					}
+				} else {
+					console.log(this.nombre + " ha dado un sorbo a su bebida NO alcohólica, le quedan " + bebida.getSorbos());
 				}
 
 				return this;
@@ -54,12 +54,17 @@
 
 		function Bebida(alcoholica, sorbos) {
 			this.alcoholica = alcoholica;
-			this.sorbos = sorbos;
+			this.sorbos = sorbos <= 10 ? sorbos : 10;
 			this.llena = true;
 
+			this.getAlcoholica = function() {
+				return this.alcoholica;
+			}
+			
 			this.setSorbos = function() {
 				this.sorbos--;
 			}
+
 			this.getSorbos = function() {
 				return this.sorbos;
 			}
@@ -73,7 +78,6 @@
 		var juan = new Persona("Juan", 17);
 
 		var piscola = new Bebida(true, 5);
-		var cerveza = new Bebida(true, 5);
 		var jugo = new Bebida(false, 5);
 	
 	</script>
